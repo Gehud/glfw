@@ -2,7 +2,6 @@ project "GLFW"
 	kind "StaticLib"
 	language "C"
 	systemversion "latest"
-	staticruntime "On"
 
 	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
 	objdir ("bin/intermediate/" .. output_dir .. "/%{prj.name}")
@@ -25,7 +24,7 @@ project "GLFW"
 	}
 
 	filter "system:linux"
-		pic "On"
+		pic "on"
 
 		files {
 			"src/x11_init.c",
@@ -65,6 +64,8 @@ project "GLFW"
 
 	filter "configurations:Debug"
 		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		runtime "Release"
+		optimize "on"
