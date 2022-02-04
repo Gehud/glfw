@@ -4,8 +4,8 @@ project "GLFW"
 	systemversion "latest"
 	staticruntime "On"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin/intermediate/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
+	objdir ("bin/intermediate/" .. output_dir .. "/%{prj.name}")
 
 	files {
 		"include/GLFW/glfw3.h",
@@ -65,8 +65,6 @@ project "GLFW"
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		symbols "on"
 
 	filter "configurations:Release"
 		runtime "Release"
-		optimize "on"
