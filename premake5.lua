@@ -62,10 +62,10 @@ project "GLFW"
 			"_CRT_SECURE_NO_WARNINGS"
 		}
 
-	filter "configurations:Debug"
+	filter "configurations:debug"
 		runtime "Debug"
 		symbols "on"
 
-	filter "configurations:Release"
+	filter "configurations:release"
 		runtime "Release"
 		optimize "on"
