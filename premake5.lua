@@ -1,4 +1,4 @@
-project "glfw"
+project "GLFW"
 	kind "StaticLib"
 	systemversion "latest"
 	language "C"
@@ -62,10 +62,10 @@ project "glfw"
 			"_CRT_SECURE_NO_WARNINGS"
 		}
 
-	filter "configurations:debug"
+	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
 
-	filter "configurations:release"
+	filter "configurations:Delease"
 		runtime "Release"
 		optimize "on"
