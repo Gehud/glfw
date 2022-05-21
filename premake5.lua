@@ -1,4 +1,4 @@
-project "GLFW"
+project "glfw"
 	kind "StaticLib"
 	systemversion "latest"
 	language "C"
