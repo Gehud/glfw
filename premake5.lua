@@ -1,10 +1,9 @@
 project "GLFW"
 	kind "StaticLib"
-	systemversion "latest"
 	language "C"
 
-	targetdir ("bin/" .. output_dir .. "/%{prj.name}")
-	objdir ("bin/int/" .. output_dir .. "/%{prj.name}")
+	objdir ("build/obj/%{cfg.buildcfg}-%{cfg.platform}")
+	targetdir ("build/%{cfg.buildcfg}-%{cfg.platform}")
 
 	files {
 		"include/GLFW/glfw3.h",
@@ -20,11 +19,11 @@ project "GLFW"
 		"src/null_init.c",
 		"src/null_monitor.c",
 		"src/null_window.c",
-		"src/null_joystick.c"
+		"src/null_joystick.c",
 	}
 
 	filter "system:linux"
-		pic "on"
+		pic "On"
 
 		files {
 			"src/x11_init.c",
@@ -36,7 +35,7 @@ project "GLFW"
 			"src/glx_context.c",
 			"src/egl_context.c",
 			"src/osmesa_context.c",
-			"src/linux_joystick.c"
+			"src/linux_joystick.c",
 		}
 
 		defines {
@@ -44,6 +43,7 @@ project "GLFW"
 		}
 
 	filter "system:windows"
+		systemversion "latest"
 		files {
 			"src/win32_init.c",
 			"src/win32_joystick.c",
@@ -54,7 +54,7 @@ project "GLFW"
 			"src/wgl_context.c",
 			"src/egl_context.c",
 			"src/osmesa_context.c",
-			"src/win32_module.c"
+			"src/win32_module.c",
 		}
 
 		defines { 
@@ -64,8 +64,14 @@ project "GLFW"
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		symbols "on"
+		symbols "On"
 
 	filter "configurations:Delease"
 		runtime "Release"
-		optimize "on"
+		optimize "On"
+
+	filter "platforms:Windows32"
+		architecture "x86"
+
+	filter "platforms:Windows64"
+		architecture "x86_64"
