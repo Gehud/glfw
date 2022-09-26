@@ -28,6 +28,8 @@
 
 #include "internal.h"
 
+#if defined(_GLFW_COCOA)
+
 #include <float.h>
 #include <string.h>
 
@@ -791,7 +793,19 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
         contentRect = NSMakeRect(xpos, ypos, mode.width, mode.height);
     }
     else
-        contentRect = NSMakeRect(0, 0, wndconfig->width, wndconfig->height);
+    {
+        if (wndconfig->xpos == GLFW_ANY_POSITION ||
+            wndconfig->ypos == GLFW_ANY_POSITION)
+        {
+            contentRect = NSMakeRect(0, 0, wndconfig->width, wndconfig->height);
+        }
+        else
+        {
+            const int xpos = wndconfig->xpos;
+            const int ypos = _glfwTransformYCocoa(wndconfig->ypos + wndconfig->height - 1);
+            contentRect = NSMakeRect(xpos, ypos, wndconfig->width, wndconfig->height);
+        }
+    }
 
     NSUInteger styleMask = NSWindowStyleMaskMiniaturizable;
 
@@ -821,10 +835,14 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
         [window->ns.object setLevel:NSMainMenuWindowLevel + 1];
     else
     {
-        [(NSWindow*) window->ns.object center];
-        _glfw.ns.cascadePoint =
-            NSPointToCGPoint([window->ns.object cascadeTopLeftFromPoint:
-                              NSPointFromCGPoint(_glfw.ns.cascadePoint)]);
+        if (wndconfig->xpos == GLFW_ANY_POSITION ||
+            wndconfig->ypos == GLFW_ANY_POSITION)
+        {
+            [(NSWindow*) window->ns.object center];
+            _glfw.ns.cascadePoint =
+                NSPointToCGPoint([window->ns.object cascadeTopLeftFromPoint:
+                                NSPointFromCGPoint(_glfw.ns.cascadePoint)]);
+        }
 
         if (wndconfig->resizable)
         {
@@ -1619,8 +1637,16 @@ void _glfwSetCursorPosCocoa(_GLFWwindow* window, double x, double y)
 void _glfwSetCursorModeCocoa(_GLFWwindow* window, int mode)
 {
     @autoreleasepool {
+
+    if (mode == GLFW_CURSOR_CAPTURED)
+    {
+        _glfwInputError(GLFW_FEATURE_UNIMPLEMENTED,
+                        "Cocoa: Captured cursor mode not yet implemented");
+    }
+
     if (_glfwWindowFocusedCocoa(window))
         updateCursorMode(window);
+
     } // autoreleasepool
 }
 
@@ -2022,4 +2048,6 @@ GLFWAPI id glfwGetCocoaWindow(GLFWwindow* handle)
 
     return window->ns.object;
 }
+
+#endif // _GLFW_COCOA
 
